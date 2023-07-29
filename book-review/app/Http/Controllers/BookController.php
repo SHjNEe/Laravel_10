@@ -54,10 +54,47 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+
+    public function show(Book $book)
     {
-        //
+        // $book = $book->load([
+        //     'reviews' => fn ($query) => $query->latest()
+        // ]);
+        // return view(
+        //     'books.show',
+        //     [
+        //         'book' => $book
+        //     ]
+        // );
+        $book = $book->load([
+            'reviews' => fn ($query) => $query->latest()
+        ]);
+        // $reviewsCount = $book->reviews->count();
+        // $averageRating = $book->reviews->avg('rating');
+
+        // return view('books.show', [
+        //     'book' => $book,
+        //     'reviewsCount' => $reviewsCount,
+        //     'averageRating' => $averageRating,
+        // ]);
+
+        $book->reviewsCount =  $book->reviews->count();
+        $book->averageRating =  $book->reviews->avg('rating');
+
+        return view('books.show', [
+            'book' =>  $book
+        ]);
     }
+    // public function show(Book $book)
+    // {
+    //     $bookWithReviews = $book->with([
+    //         'reviews' => fn ($query) => $query->latest()
+    //     ])->withCount('reviews')->withAvg('reviews', 'rating')->first();
+
+    //     return view('books.show', ['book' => $bookWithReviews]);
+    // }
+
+
 
     /**
      * Show the form for editing the specified resource.
