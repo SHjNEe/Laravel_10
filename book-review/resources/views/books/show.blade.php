@@ -2,16 +2,16 @@
 
 @section('content')
   <div class="mb-4">
-    <h1 class="sticky top-0 mb-2 text-2xl">{{ $book->title }}</h1>
+    <h1 class="mb-2 text-2xl">{{ $book->title }}</h1>
 
     <div class="book-info">
       <div class="book-author mb-4 text-lg font-semibold">by {{ $book->author }}</div>
       <div class="book-rating flex items-center">
         <div class="mr-2 text-sm font-medium text-slate-700">
-          {{ number_format($book->averageRating, 1) }}
+          {{ number_format($book->reviews_avg_rating, 1) }}
         </div>
         <span class="book-review-count text-sm text-gray-500">
-          {{ $book->reviewsCount }} {{ Str::plural('review', $book->reviewsCount) }}
+          {{ $book->reviews_count }} {{ Str::plural('review', $book->reviews_count) }}
         </span>
       </div>
     </div>
