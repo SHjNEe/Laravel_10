@@ -2,12 +2,29 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EventController extends Controller
 {
+
+    protected function errorResponse(string $message, int $statusCode)
+    {
+        return new JsonResponse(
+            [
+                'error' => [
+                    'message' => $message,
+                    'status' => $statusCode,
+                ],
+            ],
+            $statusCode
+        );
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -37,9 +54,35 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Event $event)
+    // public function show(string $id)
+    // {
+    //     try {
+    //         $event = Event::findOrFail($id);
+    //         return new JsonResponse($event, Response::HTTP_OK);
+    //     } catch (ModelNotFoundException $e) {
+    //         // \Log::error($e->getMessage());
+    //         return response()->json(array('error' => 'Event not found'),  Response::HTTP_NOT_FOUND);
+    //     }
+    // }
+
+    public function show(string $id)
     {
-        return $event;
+        try {
+            $event = Event::findOrFail($id);
+
+            // Data to be returned for success
+            $data = [
+                'message' => 'Event retrieved successfully.',
+                'data' => $event,
+                'status' => Response::HTTP_OK,
+            ];
+
+            // Return a JSON response with the data, message, and a 200 status code (OK)
+            return new JsonResponse($data, Response::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            // If the event is not found, return a JSON response with the "error" key and the error data
+            return $this->errorResponse('Event not found.', Response::HTTP_NOT_FOUND);
+        }
     }
 
     /**
