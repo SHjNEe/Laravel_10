@@ -7,10 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EventResource;
+use App\Http\Traits\CanLoadRelationships;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EventController extends Controller
 {
+    use CanLoadRelationships;
+
+    private array $relations = ['user', 'attendees', 'attendees.user'];
 
     protected function errorResponse(string $message, int $statusCode)
     {
@@ -25,13 +30,19 @@ class EventController extends Controller
         );
     }
 
+
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Event::all();
+        $query = $this->loadRelationships(Event::query());
+        // return Event::all();
+        return EventResource::collection($query->paginate());
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -48,7 +59,7 @@ class EventController extends Controller
             ...$data,
             'user_id' => 1
         ]);
-        return $event;
+        return new EventResource($this->loadRelationships($event));
     }
 
     /**
@@ -65,24 +76,25 @@ class EventController extends Controller
     //     }
     // }
 
-    public function show(string $id)
+    public function show(Event $event)
     {
-        try {
-            $event = Event::findOrFail($id);
+        return new EventResource($this->loadRelationships($event));
+        // try {
+        //     $event = Event::findOrFail($id);
 
-            // Data to be returned for success
-            $data = [
-                'message' => 'Event retrieved successfully.',
-                'data' => $event,
-                'status' => Response::HTTP_OK,
-            ];
+        //     // Data to be returned for success
+        //     $data = [
+        //         'message' => 'Event retrieved successfully.',
+        //         'data' => $event,
+        //         'status' => Response::HTTP_OK,
+        //     ];
 
-            // Return a JSON response with the data, message, and a 200 status code (OK)
-            return new JsonResponse($data, Response::HTTP_OK);
-        } catch (ModelNotFoundException $e) {
-            // If the event is not found, return a JSON response with the "error" key and the error data
-            return $this->errorResponse('Event not found.', Response::HTTP_NOT_FOUND);
-        }
+        //     // Return a JSON response with the data, message, and a 200 status code (OK)
+        //     return new JsonResponse($data, Response::HTTP_OK);
+        // } catch (ModelNotFoundException $e) {
+        //     // If the event is not found, return a JSON response with the "error" key and the error data
+        //     return $this->errorResponse('Event not found.', Response::HTTP_NOT_FOUND);
+        // }
     }
 
     /**
@@ -100,7 +112,7 @@ class EventController extends Controller
             ...$data,
             'user_id' => 1
         ]);
-        return $event;
+        return new EventResource($this->loadRelationships($event));
     }
 
     /**
