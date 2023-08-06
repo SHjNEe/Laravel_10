@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Resources\EventResource;
 use App\Http\Traits\CanLoadRelationships;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -16,6 +17,12 @@ class EventController extends Controller
     use CanLoadRelationships;
 
     private array $relations = ['user', 'attendees', 'attendees.user'];
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
+
 
     protected function errorResponse(string $message, int $statusCode)
     {
@@ -57,7 +64,7 @@ class EventController extends Controller
         ]);
         $event = Event::create([
             ...$data,
-            'user_id' => 1
+            'user_id' => $request->user()->id
         ]);
         return new EventResource($this->loadRelationships($event));
     }
@@ -78,7 +85,9 @@ class EventController extends Controller
 
     public function show(Event $event)
     {
-        return new EventResource($this->loadRelationships($event));
+        return new EventResource(
+            $this->loadRelationships($event)
+        );
         // try {
         //     $event = Event::findOrFail($id);
 
@@ -102,6 +111,12 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        // if (Gate::denies('update-event', $event)) {
+        //     abort(403, 'You are note authorized!');
+        // }
+        $this->authorize('update-event', $event, [
+            'message' => 'You do not have permission to update this event.'
+        ]);
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
