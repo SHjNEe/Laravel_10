@@ -21,6 +21,7 @@ class EventController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum')->except(['index', 'show']);
+        $this->authorizeResource(Event::class, 'event');
     }
 
 
@@ -114,9 +115,9 @@ class EventController extends Controller
         // if (Gate::denies('update-event', $event)) {
         //     abort(403, 'You are note authorized!');
         // }
-        $this->authorize('update-event', $event, [
-            'message' => 'You do not have permission to update this event.'
-        ]);
+        // $this->authorize('update-event', $event, [
+        //     'message' => 'You do not have permission to update this event.'
+        // ]);
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
