@@ -18,6 +18,9 @@
         'resources/js/app.js',
         ])
         @stack('js')
+        <script>
+         
+        </script>
     
     </body>
 </html>

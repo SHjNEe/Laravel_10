@@ -29,5 +29,14 @@ window.Echo = new Echo({
     disableStats: true,
     // wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
     forceTLS: false,
+    authEndpoint: "/broadcasting/auth",
+
     // enabledTransports: ["ws", "wss"],
 });
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: process.env.MIX_PUSHER_APP_KEY,
+//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+//     encrypted: true,
+// authEndpoint: '/broadcasting/auth',
+// });

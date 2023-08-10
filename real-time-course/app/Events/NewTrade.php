@@ -38,3 +38,6 @@ class NewTrade implements ShouldBroadcast
         return new Channel('trades');
     }
 }
+
+
+
