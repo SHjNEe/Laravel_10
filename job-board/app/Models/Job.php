@@ -16,4 +16,12 @@ class Job extends Model
         'Sales',
         'Marketing'
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(function ($query) use ($search) {
+            $query->where('title', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
+        });
+    }
 }
