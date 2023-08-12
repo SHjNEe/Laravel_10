@@ -29,11 +29,10 @@ class AuthController extends Controller
 
         $remember = $request->filled('remember');
         if ($this->authService->attemptLogin($request->email, $request->password, $remember)) {
-            return redirect()->intended('/');
+            return redirect()->route('jobs.index')->with('success', 'Loggin successfully');
         } else {
             return redirect()->back()
-                ->with('message', 'Invalid credentials')
-                ->with('status', 'error')
+                ->with('error', 'Invalid credentials')
                 ->withInput($request->except('password'))
                 ->withErrors(['password' => 'Password is valid'])
                 ->with('status', 'error');

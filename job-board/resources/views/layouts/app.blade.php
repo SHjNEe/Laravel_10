@@ -11,8 +11,12 @@
 
 <body
   class="from-10% via-30% to-90% mx-auto mt-10 max-w-2xl bg-gradient-to-r from-indigo-100 via-sky-100 to-emerald-100 text-slate-700">
-  @if(session('message'))
-  <x-toast status="{{ session('status') }}" message="{{ session('message') }}" />
+  {{-- @if(session('message'))
+  @endif --}}
+  @if (session('error'))
+    <x-toast status="error" message="{{ session('error') }}" />
+  @elseif(session('success'))
+    <x-toast status="success" message="{{ session('success') }}" />
   @endif
   <nav class="mb-8 flex justify-between text-lg font-medium">
     <ul class="flex space-x-2">
