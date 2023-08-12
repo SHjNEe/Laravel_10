@@ -17,8 +17,21 @@ class JobController extends Controller
 
     public function index(Request $request)
     {
-        $jobs = $this->jobService->getListJobs($request);
-        return view('job.index', compact('jobs'));
+        // $jobs = $this->jobService->all();
+        // $jobs = $this->jobService->getListJobs($request);
+
+        $filters = $request->only(
+            'search',
+            'min_salary',
+            'max_salary',
+            'experience',
+            'category'
+        );
+        return view(
+            'job.index',
+            ['jobs' => Job::with('employer')->filter($filters)->get()]
+        );
+        // return view('job.index', compact('jobs'));
     }
 
     /**
@@ -42,7 +55,10 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        return view('job.show', compact('job'));
+        return view(
+            'job.show',
+            ['job' => $this->jobService->getJobDetail($job)]
+        );
     }
 
     /**
