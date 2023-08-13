@@ -8,7 +8,7 @@
       {!! nl2br(e($job->description)) !!}
     </p>
     @can('apply', $job)
-      <x-link-button :href="route('job.application.create', $job)">
+      <x-link-button :href="route('jobs.application.create', $job)">
         Apply
       </x-link-button>
     @else

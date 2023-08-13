@@ -13,9 +13,7 @@
           <label for="email"
             class="mb-2 block text-sm font-medium text-slate-900">E-mail</label>
           <x-text-input name="email" />
-          @error('email')
-            <p class="text-red-500 text-sm">{{ $message }}</p>
-          @enderror
+ 
         </div>
   
         <div class="mb-8">
@@ -23,9 +21,7 @@
             Password
           </label>
           <x-text-input name="password" type="password" />
-          @error('password')
-          <p class="text-red-500 text-sm">{{ $message }}</p>
-        @enderror
+
         </div>
   
         <div class="mb-8 flex justify-between text-sm font-medium">
