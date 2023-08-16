@@ -22,6 +22,14 @@ class Job extends Model
         'Sales',
         'Marketing'
     ];
+    protected $fillable = [
+        'title',
+        'location',
+        'salary',
+        'description',
+        'experience',
+        'category'
+    ];
 
     public function employer(): BelongsTo
     {
@@ -37,7 +45,7 @@ class Job extends Model
         return $this->where('id', $this->id)
             ->whereHas(
                 'jobApplications',
-                fn($query) => $query->where('user_id', '=', $user->id ?? $user)
+                fn ($query) => $query->where('user_id', '=', $user->id ?? $user)
             )->exists();
     }
 

@@ -6,16 +6,14 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class RadioGroup extends Component
+class Label extends Component
 {
     /**
      * Create a new component instance.
      */
     public function __construct(
-        public string $name,
-        public array $options,
-        public ?bool $allOption = true,
-        public ?string $value = null
+        public ?string $for = '',
+        public ?bool $required = false
     ) {
         //
     }
@@ -25,6 +23,6 @@ class RadioGroup extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.radio-group');
+        return view('components.label');
     }
 }
